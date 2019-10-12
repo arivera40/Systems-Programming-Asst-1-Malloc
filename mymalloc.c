@@ -11,32 +11,54 @@ void initialize(){
 
 //line and function parameters will be used to throw any errors that may occur
 void *mymalloc(size_t dataSize, int line, char *function){
-	Metadata *ptr = head;
-	size_t totalFreeData = 0; 
+	if(dataSize > sizeof(myblock)){		//p = (char*)malloc(4097)
+		//throw error
+		return NULL;
+	}
+	if(dataSize 
 	if(head->next == NULL){
 		initialize();
 	}
-	while(ptr != NULL){
-		if(ptr->free == 1 && ptr->size >= (dataSize + sizeof(Metadata)){
-			insertMetadata(dataSize, ptr);
-			return (void*)((void*)ptr + sizeof(Metadata));	//believe should return pointer in position right in front of metadata
-		}else if(ptr->free = 1){
-			totalFreeData += ptr->size;
+	
+	Metadata *ptr = head;
+	Metadata *prevPtr;
+	while(ptr != NULL){	//Runs loop to combine adjacent free blocks for best possible chance to allocate memory
+		if(prevPtr != null){
+			if(prevPtr->free == 1 && ptr->free == 1){
+				combineBlocks(prevPtr, ptr);
+				continue;
+			}
+			prevPtr = ptr;
+			ptr = ptr->next;
 		}
+	}
+
+	prevPtr = NULL;
+	ptr = head;
+	while(ptr != NULL){
+		if(ptr->free == 1 && ptr->size > (dataSize + sizeof(Metadata)){
+			insertMetadata(dataSize, ptr);
+			return (void*)((void*)ptr + sizeof(Metadata));	//website: (void*)(++ptr) in order to return correct position in front
+		}else if(ptr->free = 1 && ptr->size == dataSize){
+			ptr->free = 0;
+			return (void*)((void*)ptr + sizeof(Metadata));
+		}
+		prevPtr = ptr;
 		ptr = ptr->next;
 	}
-	if(totalFreeData < (dataSize + sizeof(Metadata)){
-		//There is not enough space
-		//return some type of error
-	}
-	//otherwise code will continue, it should combine existing free blocks 
 	
+	//throw error, insufficient space remaining
+	return NULL;
 }
 
-//In the case that the existing free blocks are too small we will combine free blocks to make them larger in order to fulfill malloc request
-//*** HARD FUNCTION TO CODE ***
-void combineBlocks(){
 
+void combineBlocks(Metadata *prevPtr, Metadata *ptr){
+	prevPtr->next = ptr->next;
+	prevPtr->size += ptr->size + sizeof(Metadata);
+	Metadata *tempPtr = ptr;
+	ptr = ptr->next;
+	//Need to nullify the struct tempPtr is currently pointing to
+	return;
 }
 
 //This function will be called everytime a new metadata structure needs to be inserted to bookmark end of requested data
@@ -54,7 +76,19 @@ void insertMetaData(size_t dataSize, Metadata *prevMetadata){
 }
 
 //free will set all data back to original null value and change corresponding metadata->free = 1
-void myfree(void *ptr){
-
+void myfree(void *ptr, int line, char *function){
+	// Freeing address that are not pointers, (1.a)
+	//if(!(ptr exists in the region between the beginning of block array and end of block array))	(1.b)
+		//The ptr was never allocated, throw error, Freeing pointers that were not allocated
+	
+	//The following code will work assuming 
+	Metadata *prevMetadata = ptr;
+	--prevMetadata;
+	if(prevMetadata->free == 1){	//(1.c)
+		//The data ahead is already free, throw error, redundant freeing
+	}
+	prevMetadata->free = 1;
+	
 }
+
 
