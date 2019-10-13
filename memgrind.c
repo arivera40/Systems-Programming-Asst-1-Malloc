@@ -71,22 +71,36 @@ int main(int argc, char *argv){
 	// - Keep track of each operation so that you eventually free() all pointers
 	// - Choose a random allocation size between 1 and 64 bytes
 	mallocCount = 0;
-	count = 0;
+	freeCount = 0;
+	int options;
+	count = 4096;
 	char *arr3[50];
-	for(i = 0; i <= 50; i++){
-		random = randomize(64);
-		count = 4096 - random; //size of memory capacity
-		if(count <= 0){
-			break;
+	while(freeCount == 50 && mallocCount == 50){
+		if(mallocCount == 50){
+			free(arr3[freeCount]);
+			freeCount++;
 		}else{
-			arr3[i] = (char*)malloc(random);
-		}
+			options = randomize(2);
+			random = randomize(64);
+			count = count - random;	 //size of memory capacity
+			if(count <= 0){
+				break;
+			}
+			if(options == 0){	//malloc
+				
+				arr3[mallocCount] = (char*)malloc(random);
+				mallocCount++;
+				}
+			}else if(options == 1 && freeCount < mallocCount){	//free
+				free(arr3[freeCount]);
+				freeCount++;
+				
+			}else{
+				arr3[mallocCount] = (char*)malloc(random);
+				mallocCount++;
+			}
+		
 	}
 
-	i = 0;
-	while(i<=50){
-		free(arr3[i]);
-		i++;
-	}
 
 }
