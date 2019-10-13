@@ -81,24 +81,17 @@ int main(int argc, char *argv){
 			freeCount++;
 		}else{
 			options = randomize(2);
-			random = randomize(64);
-			count = count - random;	 //size of memory capacity
-			if(count <= 0){
-				break;
-			}
-			if(options == 0){	//malloc
-				
-				arr3[mallocCount] = (char*)malloc(random);
-				mallocCount++;
-				}
-			}else if(options == 1 && freeCount < mallocCount){	//free
-				free(arr3[freeCount]);
-				freeCount++;
-				
-			}else{
-				arr3[mallocCount] = (char*)malloc(random);
-				mallocCount++;
-			}
+		}
+		if(options == 0){	//malloc		
+			arr3[mallocCount] = (char*)malloc(random);
+			mallocCount++;		
+		}else if(options == 1 && freeCount < mallocCount){	//free
+			free(arr3[freeCount]);
+			freeCount++;		
+		}else{
+			arr3[mallocCount] = (char*)malloc(random);
+			mallocCount++;
+		}
 		
 	}
 
