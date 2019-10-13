@@ -44,7 +44,7 @@ int main(int argc, char *argv){
 	int mallocCount = 0;
 	int freeCount = 0;
 	int random;
-	char *arr[50];
+	char *arr2[50];
 	while(freeCount == 50 && mallocCount == 50){
 		if(mallocCount == 50){
 			free(arr2[freeCount]);
@@ -70,5 +70,23 @@ int main(int argc, char *argv){
 	// - Keep track of each operation so that you eventually malloc() 50 times
 	// - Keep track of each operation so that you eventually free() all pointers
 	// - Choose a random allocation size between 1 and 64 bytes
+	mallocCount = 0;
+	count = 0;
+	char *arr3[50];
+	for(i = 0; i <= 50; i++){
+		random = randomize(64);
+		count = 4096 - random; //size of memory capacity
+		if(count <= 0){
+			break;
+		}else{
+			arr3[i] = (char*)malloc(random);
+		}
+	}
+
+	i = 0;
+	while(i<=50){
+		free(arr3[i]);
+		i++;
+	}
 
 }
