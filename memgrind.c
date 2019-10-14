@@ -134,38 +134,38 @@ int main(int argc, char *argv){
 		mallocCount = 0;
 		freeCount = 0;
 	}
-	//E:
+	
+	for(workloadCount = 0; workloadCount < 100; workloadCount++){
+		gettimeofday(&start, NULL);
+		//E:
 	// Malloc() 25 bytes until reaching Full Capacity (we should know it is full if the pointer we malloced for is NULL)
 	//Free() all pointers
 	//malloc () 50 bytes until reaching full capaicity
 	//free all pointers
 	//From this we should be able to test if our combineBlocks()function works effectively
 
-	mallocCount = 0;
-	char *arr4[165];
-	while(ptr == NULL){	//change header to what the output of NULL would be mallocs 25 bytes
-		arr4[mallocCount] = (char*)malloc(25);
-		mallocCount++;
-	}
-	i = 0;
-	while(i <= mallocCount){	//free all pointers
-		free(arr4[i]);
-		i++;
-	}
-	mallocCount = 0;
-	while(ptr == NULL){	//change header to what the output of NULL would be, mallocs 50 bytes
-		arr4[mallocCount] = (char*)malloc(50);
-		mallocCount++;
-	}
-	i = 0;
-	while(i <= mallocCount){
-		free(arr4[i]);
-		i++;
-	}
+		mallocCount = 0;
+		char *arr4[165];
+		while(ptr == NULL){	//change header to what the output of NULL would be mallocs 25 bytes
+			arr4[mallocCount] = (char*)malloc(25);
+			mallocCount++;
+		}
+		i = 0;
+		while(i <= mallocCount){	//free all pointers
+			free(arr4[i]);
+			i++;
+		}
+		mallocCount = 0;
+		while(ptr == NULL){	//change header to what the output of NULL would be, mallocs 50 bytes
+			arr4[mallocCount] = (char*)malloc(50);
+			mallocCount++;
+		}
+		i = 0;
+		while(i <= mallocCount){
+			free(arr4[i]);
+			i++;
+		}
 	//end of what i added
-	for(workloadCount = 0; workloadCount < 100; workloadCount++){
-		gettimeofday(&start, NULL);
-		//E
 		gettimeofday(&end, NULL);
 		workloadETime += (end - start);
 	}
