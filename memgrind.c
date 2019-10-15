@@ -1,16 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stddef.h>
 #include<time.h>
 #include"mymalloc.h"
-/*
+
 int randomize(int size){
-	time_t time;
-	srand((unsigned) time(&time));
-	return (rand() % size);
-}	*/
+	return 1 + (rand() % size);
+}	
 
 int main(int argc, char *argv){
-/*	int workloadCount;
+	int workloadCount;
 
 	double workloadATime = 0;
 	double workloadBTime = 0;
@@ -24,8 +23,7 @@ int main(int argc, char *argv){
 	int k = 0;
 	char *p;
 
-	struct timeval start, end;
-	time_t totalTime = 0;
+	time_t start, end;
 
 	// A: malloc() 1 byte and immediately free it - do this 150 times
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
@@ -35,7 +33,7 @@ int main(int argc, char *argv){
 			free(p);
 		}
 		gettimeofday(&end, NULL);
-		workloadATime += difftime(end - start);
+		workloadATime += difftime(end, start);
 	}
 
 
@@ -47,8 +45,8 @@ int main(int argc, char *argv){
 		gettimeofday(&start, NULL);
 		for(i=0; i < 150; i++){	
 			arr[i] = (char*)malloc(1);
-			if((i % 50) == 0){			//possible error in if and following for loop condition !!!!!
-				for(j=j; count <= 50 ;j++){
+			if(((i+1) % 50) == 0){			//possible error in if and following for loop condition !!!!!
+				for(j=j; count < 50 ;j++){
 					free(arr[j]);
 					count++;
 				}
@@ -56,7 +54,8 @@ int main(int argc, char *argv){
 			}
 		}
 		gettimeofday(&end, NULL);
-		workloadBTime += difftime(end - start);
+		workloadBTime += difftime(end, start);
+		j=0;
 	}
 
 	//C: Randomly choose between a 1 byte malloc() or free()ing a 1 byte pointer
@@ -92,7 +91,7 @@ int main(int argc, char *argv){
 			}
 		}
 		gettimeofday(&end, NULL);
-		workloadCTime += difftime(end - start);
+		workloadCTime += difftime(end, start);
 		mallocCount = 0;
 		freeCount = 0;
 	}
@@ -106,6 +105,7 @@ int main(int argc, char *argv){
 	mallocCount = 0;
 	freeCount = 0;
 	char *arr3[50];
+	int options;
 
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
 		gettimeofday(&start, NULL);
@@ -130,7 +130,7 @@ int main(int argc, char *argv){
 			}
 		}
 		gettimeofday(&end, NULL);
-		workloadDTime += difftime(end - start);
+		workloadDTime += difftime(end, start);
 		mallocCount = 0;
 		freeCount = 0;
 	}
@@ -164,7 +164,7 @@ int main(int argc, char *argv){
 			freeCount++;
 		}
 		gettimeofday(&end, NULL);
-		workloadETime += difftime(end - start);
+		workloadETime += difftime(end, start);
 		mallocCount = 0;
 		freeCount = 0;
 	}
@@ -176,7 +176,7 @@ int main(int argc, char *argv){
 	int totalMalloc;
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
 		gettimeofday(&start, NULL);
-		while(true){
+		while(iteration != -1){
 			size = 1;
 			for(ptr = (char*)malloc(size); ptr != NULL; ptr = (char*)malloc(size)){
 				arr5[mallocCount] = ptr;
@@ -200,7 +200,7 @@ int main(int argc, char *argv){
 			freeCount++;
 		}
 		gettimeofday(&end, NULL);
-		workloadFTime += difftime(end - start);
+		workloadFTime += difftime(end, start);
 		iteration = 0;
 		mallocCount = 0;
 		freeCount = 0;
@@ -212,14 +212,17 @@ int main(int argc, char *argv){
 	printf("Mean time to execute workload D %lf seconds\n", (workloadDTime / 100));
 	printf("Mean time to execute workload E %lf seconds\n", (workloadETime / 100));
 	printf("Mean time to execute workload F %lf seconds\n", (workloadFTime / 100));
-*/
-	printf("yerr\n");
-	int *ptr = (int*)malloc(10);
-	printf("(1)\n");
+
+/*	printf("starts here...\n");
+	printf("Enters malloc function\n");
+	int *ptr = (int*)malloc(2);
+	printf("Exits malloc function\n");
+	printf("Enters free function\n");
 	free(ptr);
+	printf("Exits free function\n");
 
 	int fakePtr;
-	printf("(2)\n");
+	printf("Enters free function(with fake pointer)\n");
 	free((int*)fakePtr);
-	printf("returned\n");
+	printf("Exits free function(with fake pointer)\n");	*/
 }
