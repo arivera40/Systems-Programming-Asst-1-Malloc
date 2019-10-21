@@ -13,8 +13,8 @@ void initialize(){
 
 //line and function parameters will be used to throw any errors that may occur
 void *mymalloc(size_t dataSize, int line, char *file){
-//	printf("dataSize = %zu & sizeof(Metadata) = %zu\n", dataSize, sizeof(Metadata));
-	if(dataSize > sizeof(myblock)){		//p = (char*)malloc(4097)
+
+	if(dataSize > sizeof(myblock)){		
 		printf("Insufficient memory to fulfill malloc request\n filename: %s, Line: %d\n", file, line);
 		return NULL;
 	}
@@ -23,7 +23,6 @@ void *mymalloc(size_t dataSize, int line, char *file){
 	}
 	if(!(head->size)){
 		initialize();
-	//	printf("head->size = %zu\n", head->size);
 	}
 	
 	Metadata *ptr = head;
@@ -45,11 +44,7 @@ void *mymalloc(size_t dataSize, int line, char *file){
 	
 	prevPtr = NULL;
 	ptr = head;
-/*	if(ptr->next == NULL){
-		printf("head->next == NULL\nhead->free == 1\n");
-	}else{
-		printf("head->next == Metadata\nhead->free == %d\n", head->free);
-	}*/
+
 	while(ptr != NULL){
 		if(ptr->free == 1 && ptr->size >= (dataSize + sizeof(Metadata))){
 			insertMetadata(dataSize, ptr);
@@ -78,7 +73,6 @@ void combineBlocks(Metadata *prevPtr, Metadata *ptr){
 void insertMetadata(size_t dataSize, Metadata *prevMetadata){
 	Metadata *bookmark = (Metadata*)((void*)prevMetadata + dataSize + sizeof(Metadata));
 	bookmark->size = prevMetadata->size - dataSize - sizeof(Metadata);
-	//printf("bookmark->size = %zu\n", bookmark->size);
 	bookmark->free = 1;
 	bookmark->next = prevMetadata->next;
 	prevMetadata->next = bookmark;
@@ -91,16 +85,20 @@ void myfree(void *ptr, int line, char *file){
 	Metadata *prevMetadata = ptr;
 	--prevMetadata;
 
-//	printf("prevMetadata->size = %zu\n", prevMetadata->size); 
+
 	// Freeing address that are not pointers, (1.a)
 	if((char*)ptr < myblock || (char*)ptr >= myblock + 4096){	//(1.b)
 		printf("Pointer address is out of bounds\n file: %s, line: %d", file, line);
 	}	
 	
+	int* ptrNum = (int *) ((ptr-4));
+	if(*ptrNum == 0){
+		printf("Address is not a pointer\n filename:%s, line: %d\n", file, line);
+	}
+
 	if(prevMetadata->free == 1){	//(1.c)
 		printf("Redundant freeing: pointer has already been freed\nfilename: %s, line: %d\n", file, line);
 	}
 	prevMetadata->free = 1;	
 	
 }
-
