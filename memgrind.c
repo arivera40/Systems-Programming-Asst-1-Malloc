@@ -46,7 +46,7 @@ int main(int argc, char *argv){
 		gettimeofday(&start, 0);
 		for(i=0; i < 150; i++){	
 			arr[i] = (char*)malloc(1);
-			if(((i+1) % 50) == 0){			//possible error in if and following for loop condition !!!!!
+			if(((i+1) % 50) == 0){		
 				for(j=j; count < 50 ;j++){
 					free(arr[j]);
 					count++;
@@ -74,7 +74,6 @@ int main(int argc, char *argv){
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
 		gettimeofday(&start, 0);
 		while(freeCount != 50){
-			//printf("freeCount = %d\nmallocCount = %d\n", freeCount, mallocCount);
 			if(mallocCount == 50){
 				free(arr2[freeCount]);
 				freeCount++;
@@ -119,7 +118,6 @@ int main(int argc, char *argv){
 				options = randomize(2);
 				if(options == 1){	//malloc
 					random = randomize(64);
-					//printf("random = %d", random);
 					arr3[mallocCount] = (char*)malloc(random);
 					mallocCount++;
 				}else if(options == 2 && freeCount < mallocCount){	//free
@@ -139,11 +137,8 @@ int main(int argc, char *argv){
 	}
 
 	//E:
-	// Malloc() 25 bytes until reaching Full Capacity (we should know it is full if the pointer we malloced for is NULL)
-	//Free() all pointers
-	//malloc () 50 bytes until reaching full capaicity
-	//free all pointers
-	//From this we should be able to test if our combineBlocks()function works effectively
+	//Malloc 25 bytes until there is no more space
+	//Free all pointers
 	char *arr4[165];
 	char *ptr;
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
@@ -156,81 +151,55 @@ int main(int argc, char *argv){
 			free(arr4[freeCount]);
 			freeCount++;
 		}
-		mallocCount = 0;
-		freeCount = 0;
-		for(ptr = (char*)malloc(50); ptr != NULL; ptr = (char*)malloc(50)){
-			arr4[mallocCount] = ptr;
-			mallocCount++;
-		}
-		while(freeCount < mallocCount){
-			free(arr4[freeCount]);
-			freeCount++;
-		}
 		gettimeofday(&end, 0);
 		workloadETime += ((end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec-start.tv_usec));
 		mallocCount = 0;
 		freeCount = 0;
 	}
-	
-	//f
-/*	int iteration = 0;
+
+
+	//F:
+	// Malloc() 25 bytes until reaching Full Capacity (we should know it is full if the pointer we malloced for is NULL)
+	//Free() all pointers
+	//malloc () 50 bytes until reaching full capaicity
+	//free all pointers
+	//From this we should be able to test if our combineBlocks()function works effectively
 	char *arr5[165];
-	int size;
-	int totalMalloc;
+	char *ptr1;
 	for(workloadCount = 0; workloadCount < 100; workloadCount++){
 		gettimeofday(&start, 0);
-		while(iteration != -1){
-			size = 1;
-			for(ptr = (char*)malloc(size); ptr != NULL; ptr = (char*)malloc(size)){
-				arr5[mallocCount] = ptr;
-				mallocCount = (iteration == 1)? mallocCount + 2 : mallocCount + 1;
-				size = size * 2;
-			}
-			iteration++;
-			if(iteration == 2){
-				break;
-			}
-			while(freeCount < mallocCount){
-				free(arr5[freeCount]);
-				freeCount += 2;
-			}
-			totalMalloc = mallocCount;
-			mallocCount = 0;
+		for(ptr1 = (char*)malloc(25); ptr1 != NULL; ptr1 = (char*)malloc(25)){
+			arr5[mallocCount] = ptr1;
+			mallocCount++;
 		}
+		while(freeCount < mallocCount){	//free all pointers
+			free(arr5[freeCount]);
+			freeCount++;
+		}
+		mallocCount = 0;
 		freeCount = 0;
-		while(freeCount < totalMalloc){
+		for(ptr1 = (char*)malloc(50); ptr1 != NULL; ptr1 = (char*)malloc(50)){
+			arr5[mallocCount] = ptr1;
+			mallocCount++;
+		}
+		while(freeCount < mallocCount){
 			free(arr5[freeCount]);
 			freeCount++;
 		}
 		gettimeofday(&end, 0);
 		workloadFTime += ((end.tv_sec - start.tv_sec)*1000000 + (end.tv_usec-start.tv_usec));
-		iteration = 0;
 		mallocCount = 0;
 		freeCount = 0;
-	}*/
-
-	char **arraytest = (char**)malloc(sizeof(char*) * 3);
-	for(i=0; i < 3; i++){
-		arraytest[i] = (char*)malloc(sizeof(char) * 3);
 	}
+
+	
 
 	printf("Average time to execute workload A: %d milliseconds\n", (workloadATime / 100));
 	printf("Average time to execute workload B: %d milliseconds\n", (workloadBTime / 100));
 	printf("Average time to execute workload C: %d milliseconds\n", (workloadCTime / 100));
 	printf("Average time to execute workload D: %d milliseconds\n", (workloadDTime / 100));
 	printf("Average time to execute workload E: %d milliseconds\n", (workloadETime / 100));
-//	printf("Average time to execute workload F: %d milliseconds\n", (workloadFTime / 100));
+	printf("Average time to execute workload F: %d milliseconds\n", (workloadFTime / 100));
 
-/*	printf("starts here...\n");
-	printf("Enters malloc function\n");
-	int *ptr = (int*)malloc(2);
-	printf("Exits malloc function\n");
-	printf("Enters free function\n");
-	free(ptr);
-	printf("Exits free function\n");
 
-	int fakePtr;
-	printf("Enters free function(with fake pointer)\n");
-	free((int*)fakePtr);
-	printf("Exits free function(with fake pointer)\n");	*/
 }
